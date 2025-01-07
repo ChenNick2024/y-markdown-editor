@@ -1,34 +1,12 @@
 # y-markdown-editor
 
-An Electron application with React and TypeScript
+一个基于 Electron 的 Markdown 编辑器。
+技术栈：Electron + React + TypeScript + Zustand + TailwindCSS
 
-## Recommended IDE Setup
+## 完成日记
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-
-## Project Setup
-
-### Install
-
-```bash
-$ pnpm install
-```
-
-### Development
-
-```bash
-$ pnpm dev
-```
-
-### Build
-
-```bash
-# For windows
-$ pnpm build:win
-
-# For macOS
-$ pnpm build:mac
-
-# For Linux
-$ pnpm build:linux
-```
+- [x] 项目初始化，引入组件库`Ant Design`，样式处理工具`TailwindCSS`，状态管理工具`Zustand`。
+- [x] 完成左侧菜单组件，完成文章列表的增删改查。
+- [x] 新增`Markdown`文件到指定文件路径.
+- [x] 完成文章的增删改查。
+- [ ] 右侧内容页顶部`Tabs`
