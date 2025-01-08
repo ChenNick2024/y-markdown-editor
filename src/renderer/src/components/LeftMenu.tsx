@@ -18,6 +18,8 @@ function LeftMenu(): JSX.Element {
   const setActiveArticle = useStore((state: any) => state.setActiveArticle)
   const addArticle = useStore((state: any) => state.addArticle)
   const addTab = useStore((state: any) => state.addTab)
+  const updateTab = useStore((state: any) => state.updateTab)
+
   const [searchValue, setSearchValue] = useState<string>('')
   const [filterArticles, setFilterArticles] = useState<ArticleProps[]>([])
 
@@ -56,7 +58,7 @@ function LeftMenu(): JSX.Element {
           createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           filePath: savePath,
-          isEdit: false
+          isEdit: true
         }
 
         window.electron.ipcRenderer.invoke('create-article', data.filePath, value).then((res) => {
