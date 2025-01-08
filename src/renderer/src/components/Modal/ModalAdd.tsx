@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-06 09:53:56
  * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-08 10:55:52
+ * @LastEditTime: 2025-01-08 12:29:29
  * @FilePath: /y-markdown-editor/src/renderer/src/components/Modal/ModalAdd.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -72,6 +72,11 @@ function YModal({
             <Col>文章标题：</Col>
             <Col span={18}>
               <Input
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (e.key === 'Enter') {
+                    handleOk()
+                  }
+                }}
                 ref={inputRef}
                 allowClear
                 value={value}

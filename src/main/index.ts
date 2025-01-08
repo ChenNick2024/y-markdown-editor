@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-05 18:20:44
  * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-08 11:40:09
+ * @LastEditTime: 2025-01-08 14:20:41
  * @FilePath: /y-markdown-editor/src/main/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -111,6 +111,23 @@ app.whenReady().then(() => {
       console.error(error)
       return { code: 1, message: '文件更新失败' }
     }
+  })
+
+  ipcMain.handle('save-article', async (_event, article) => {
+    const _filePath = `${article.filePath}/${article.title}.md`
+    try {
+      fs.writeFileSync(_filePath, article.content)
+      return { code: 0, message: '文件保存成功' }
+    } catch (error) {
+      console.error(error)
+      return { code: 1, message: '文件保存失败' }
+    }
+  })
+
+  ipcMain.handle('get-current-article', async (_event, article) => {
+    const content = fs.readFileSync(`${article.filePath}/${article.title}.md`, 'utf-8')
+    console.log('content', content)
+    return { code: 0, content }
   })
 
   ipcMain.handle('delete-article', async (event, filePath, fileName) => {

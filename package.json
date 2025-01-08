@@ -27,7 +27,7 @@
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@toast-ui/react-editor": "^3.2.3",
-    "antd": "^5.22.7",
+    "antd": "^5.22.1",
     "dayjs": "^1.11.13",
     "electron-is-dev": "^2.0.0",
     "electron-updater": "^6.1.7",

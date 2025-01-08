@@ -116,7 +116,7 @@ function LeftMenu(): JSX.Element {
               <span className="truncate">{item.title}</span>
               <Flex
                 gap={8}
-                className="absolute px-2 right-2 text-[#6A5ACD] group-hover:opacity-100 opacity-0 duration-500"
+                className="absolute px-2 right-2 text-[#1dabfc] group-hover:opacity-100 opacity-0 duration-500"
               >
                 <FormOutlined onClick={(e) => handleEdit(item, e)} />
                 <Popconfirm
