@@ -24,7 +24,8 @@ function LeftMenu(): JSX.Element {
   const [filterArticles, setFilterArticles] = useState<ArticleProps[]>([])
 
   // 编辑标题
-  const handleEdit = (item: ArticleProps): void => {
+  const handleEdit = (item: ArticleProps, e: MouseEvent): void => {
+    e.stopPropagation()
     ModalEditor({
       title: item.title,
       onCb: (val) => {
@@ -58,7 +59,7 @@ function LeftMenu(): JSX.Element {
           createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
           filePath: savePath,
-          isEdit: true
+          isEdit: false
         }
 
         window.electron.ipcRenderer.invoke('create-article', data.filePath, value).then((res) => {
@@ -72,7 +73,8 @@ function LeftMenu(): JSX.Element {
     })
   }
 
-  const handleDelete = (item: ArticleProps): void => {
+  const handleDelete = (item: ArticleProps, e: MouseEvent): void => {
+    e.stopPropagation()
     window.electron.ipcRenderer.invoke('delete-article', item.filePath, item.title).then((res) => {
       if (res.code === 0) {
         deleteArticle(item.id)
@@ -116,14 +118,15 @@ function LeftMenu(): JSX.Element {
                 gap={8}
                 className="absolute px-2 right-2 text-[#6A5ACD] group-hover:opacity-100 opacity-0 duration-500"
               >
-                <FormOutlined onClick={() => handleEdit(item)} />
+                <FormOutlined onClick={(e) => handleEdit(item, e)} />
                 <Popconfirm
                   title="确定要删除吗？"
-                  onConfirm={() => handleDelete(item)}
+                  onConfirm={(e) => handleDelete(item, e)}
+                  onCancel={(e) => e.stopPropagation()}
                   okText="确定"
                   cancelText="取消"
                 >
-                  <DeleteOutlined />
+                  <DeleteOutlined onClick={(e) => e.stopPropagation()} />
                 </Popconfirm>
               </Flex>
             </li>
