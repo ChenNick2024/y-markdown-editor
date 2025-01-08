@@ -71,6 +71,7 @@ function RightContent(): JSX.Element {
         <div className="flex-1 overflow-hidden">
           {tabs.length ? (
             <Editor
+              key={activeArticle.id}
               ref={editorRef}
               initialValue={activeArticle.content} // 初始内容
               previewStyle="vertical" // 预览风格：horizontal 或 vertical
