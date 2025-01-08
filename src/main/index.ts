@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-05 18:20:44
  * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-08 09:36:41
+ * @LastEditTime: 2025-01-08 11:40:09
  * @FilePath: /y-markdown-editor/src/main/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -19,6 +19,8 @@ function createWindow(): void {
   mainWindow = new BrowserWindow({
     minWidth: 1200,
     minHeight: 800,
+    width: 1200,
+    height: 800,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
