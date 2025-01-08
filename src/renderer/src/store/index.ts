@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-06 09:17:11
  * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-06 13:14:57
+ * @LastEditTime: 2025-01-08 09:24:10
  * @FilePath: /y-markdown-editor/src/renderer/src/store/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -48,4 +48,30 @@ export const useStore = create((set) => ({
       }
     })
   },
+  tabs: [],
+  addTab: (tab: ArticleProps): void => {
+    set((state) => {
+      if (state.tabs.find((item) => item.id === tab.id)) return
+      const _tabs = [...state.tabs, tab]
+      return {
+        tabs: _tabs
+      }
+    })
+  },
+  updateTab: (tab: ArticleProps): void => {
+    set((state) => {
+      const _tabs = state.tabs.map((item) => (item.id === tab.id ? tab : item))
+      return {
+        tabs: _tabs
+      }
+    })
+  },
+  deleteTab: (id: string): void => {
+    set((state) => {
+      const _tabs = state.tabs.filter((item) => item.id !== id)
+      return {
+        tabs: _tabs
+      }
+    })
+  }
 }))

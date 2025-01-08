@@ -17,7 +17,7 @@ function LeftMenu(): JSX.Element {
   const deleteArticle = useStore((state: any) => state.deleteArticle)
   const setActiveArticle = useStore((state: any) => state.setActiveArticle)
   const addArticle = useStore((state: any) => state.addArticle)
-
+  const addTab = useStore((state: any) => state.addTab)
   const [searchValue, setSearchValue] = useState<string>('')
   const [filterArticles, setFilterArticles] = useState<ArticleProps[]>([])
 
@@ -82,6 +82,7 @@ function LeftMenu(): JSX.Element {
 
   const handleActive = (article: ArticleProps): void => {
     setActiveArticle(article)
+    addTab(article)
   }
 
   const handleSearch = (value: string): void => {

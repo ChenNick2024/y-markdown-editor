@@ -5,24 +5,11 @@ import { useStore } from '@renderer/store'
 function RightContent(): JSX.Element {
   // const title = useStore((state: any) => state.title)
   const [activeKey, setActiveKey] = useState('1')
-  const [items, setItems] = useState([
-    {
-      label: '地洒到卡上的疯狂打扫',
-      key: '1'
-    },
-    {
-      label: 'Tab 2',
-      key: '2'
-    },
-    {
-      label: 'Tab 3',
-      key: '3'
-    }
-  ])
+  const tabs = useStore((state: any) => state.tabs)
   return (
     <div className="h-full overflow-hidden bg-white border-l border-[#f5f5f5]">
       <div className="h-full p-4">
-        {items.length ? (
+        {tabs.length ? (
           <div className="tab-wrap">
             <Tabs
               type="editable-card"
@@ -35,10 +22,12 @@ function RightContent(): JSX.Element {
                 console.log(targetKey, action)
                 if (action === 'remove') {
                   console.log(targetKey)
-                  setItems(items.filter((item) => item.key != targetKey))
                 }
               }}
-              items={items}
+              items={tabs.map((item) => ({
+                label: item.title,
+                key: item.id
+              }))}
             />
           </div>
         ) : null}
