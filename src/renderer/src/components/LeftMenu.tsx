@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Input, Flex, Popconfirm, message } from 'antd'
+import { Input, Flex, Popconfirm, message, Empty } from 'antd'
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
@@ -99,38 +99,46 @@ function LeftMenu(): JSX.Element {
     window.electron.ipcRenderer.on('create-article', handleAdd)
   }, [])
 
+  const resultArticles = searchValue ? filterArticles : articles
+
   return (
     <Flex vertical className="h-full">
       <div className="w-full p-4 flex-shrink-0 shadow-sm">
         <Input.Search allowClear placeholder="请输入文件名" enterButton onSearch={handleSearch} />
       </div>
       <div className="flex-1 overflow-auto">
-        <ul className="p-4">
-          {(searchValue ? filterArticles : articles).map((item, index) => (
-            <li
-              className="relative group flex items-center h-[32px] text-[#333] cursor-pointer mb-2 px-2 py-5 rounded-md hover:bg-[#f0f0f0]"
-              style={{ backgroundColor: item.id == activeArticle.id ? '#f0f0f0' : 'transparent' }}
-              key={index}
-              onClick={() => handleActive(item)}
-            >
-              <span className="truncate">{item.title}</span>
-              <Flex
-                gap={8}
-                className="absolute px-2 right-2 text-[#1dabfc] group-hover:opacity-100 opacity-0 duration-500"
+        <ul className="h-full p-4">
+          {resultArticles.length ? (
+            resultArticles.map((item, index) => (
+              <li
+                className="relative group flex items-center h-[32px] text-[#333] cursor-pointer mb-2 px-2 py-5 rounded-md hover:bg-[#f0f0f0]"
+                style={{ backgroundColor: item.id == activeArticle.id ? '#f0f0f0' : 'transparent' }}
+                key={index}
+                onClick={() => handleActive(item)}
               >
-                <FormOutlined onClick={(e) => handleEdit(item, e)} />
-                <Popconfirm
-                  title="确定要删除吗？"
-                  onConfirm={(e) => handleDelete(item, e)}
-                  onCancel={(e) => e.stopPropagation()}
-                  okText="确定"
-                  cancelText="取消"
+                <span className="truncate">{item.title}</span>
+                <Flex
+                  gap={8}
+                  className="absolute px-2 right-2 text-[#1dabfc] group-hover:opacity-100 opacity-0 duration-500"
                 >
-                  <DeleteOutlined onClick={(e) => e.stopPropagation()} />
-                </Popconfirm>
-              </Flex>
-            </li>
-          ))}
+                  <FormOutlined onClick={(e) => handleEdit(item, e)} />
+                  <Popconfirm
+                    title="确定要删除吗？"
+                    onConfirm={(e) => handleDelete(item, e)}
+                    onCancel={(e) => e.stopPropagation()}
+                    okText="确定"
+                    cancelText="取消"
+                  >
+                    <DeleteOutlined onClick={(e) => e.stopPropagation()} />
+                  </Popconfirm>
+                </Flex>
+              </li>
+            ))
+          ) : (
+            <div className="flex justify-center items-center h-full">
+              <Empty description="暂无数据" />
+            </div>
+          )}
         </ul>
       </div>
     </Flex>

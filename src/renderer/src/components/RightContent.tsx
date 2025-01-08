@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Empty, Button, Typography } from 'antd'
+import { Empty, Button, Typography, message } from 'antd'
 import { FrownOutlined } from '@ant-design/icons'
 import { Editor } from '@toast-ui/react-editor'
 import TopTabs from './TopTabs'
@@ -7,18 +7,47 @@ import { useStore } from '@renderer/store'
 import '@toast-ui/editor/dist/toastui-editor.css'
 import 'highlight.js/styles/github.css'
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
+import ModalAdd from './Modal/ModalAdd'
+import { v4 as uuidv4 } from 'uuid'
+import dayjs from 'dayjs'
+
 function RightContent(): JSX.Element {
   const editorRef = useRef<Editor>(null)
   const activeArticle = useStore((state: any) => state.activeArticle)
   const articles = useStore((state: any) => state.articles)
   const tabs = useStore((state: any) => state.tabs)
   const saveCurrentArticle = useStore((state: any) => state.saveCurrentArticle)
+  const addArticle = useStore((state: any) => state.addArticle)
 
   const handleSave = (): void => {
     const markdownContent = editorRef.current?.getInstance().getMarkdown() // 获取 Markdown 内容
     saveCurrentArticle({
       ...activeArticle,
       content: markdownContent
+    })
+  }
+
+  const handleAdd = (): void => {
+    ModalAdd({
+      onCb: (value, savePath) => {
+        const data = {
+          id: uuidv4(),
+          title: value,
+          content: '',
+          createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+          filePath: savePath,
+          isEdit: false
+        }
+
+        window.electron.ipcRenderer.invoke('create-article', data.filePath, value).then((res) => {
+          if (res.code === 0) {
+            addArticle(data)
+          } else {
+            message.error(res.message)
+          }
+        })
+      }
     })
   }
 
@@ -57,7 +86,11 @@ function RightContent(): JSX.Element {
                 imageStyle={{ height: 40 }}
                 description={<Typography.Text>请先选择一篇文章</Typography.Text>}
               >
-                {!articles.length ? <Button type="primary">创建文章</Button> : null}
+                {!articles.length ? (
+                  <Button type="primary" onClick={handleAdd}>
+                    创建文章
+                  </Button>
+                ) : null}
               </Empty>
             </div>
           )}
