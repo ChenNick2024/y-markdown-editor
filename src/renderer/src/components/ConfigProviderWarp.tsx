@@ -7,11 +7,16 @@
  * @Description: 配置主题，弹窗高阶组件里里会丢失主题，这边统一配置一下包裹组件
  */
 import { ConfigProvider } from 'antd'
+import { ThemeColor } from '@renderer/utils/constant'
 
 export default function ConfigProviderWarp({
   children
 }: {
   children: React.ReactNode
 }): JSX.Element {
-  return <ConfigProvider theme={{ token: { colorPrimary: '#1dabfc' } }}>{children}</ConfigProvider>
+  return (
+    <ConfigProvider theme={{ token: { colorPrimary: ThemeColor.primary } }}>
+      {children}
+    </ConfigProvider>
+  )
 }

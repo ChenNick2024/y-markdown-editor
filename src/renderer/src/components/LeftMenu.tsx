@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Input, Flex, Popconfirm, message, Empty } from 'antd'
-import { FormOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Input, Flex, Popconfirm, message, Empty, Button } from 'antd'
+import { FormOutlined, DeleteOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import ModalEditor from './Modal/ModalEditor'
@@ -8,6 +8,7 @@ import ModalAdd from './Modal/ModalAdd'
 import { useStore } from '@renderer/store'
 import { useEffect } from 'react'
 import { ArticleProps } from '@renderer/utils/types'
+import { ThemeColor } from '@renderer/utils/constant'
 
 function LeftMenu(): JSX.Element {
   const articles = useStore((state) => state.articles)
@@ -96,6 +97,12 @@ function LeftMenu(): JSX.Element {
 
   const handleOpen = (_event, data): void => {
     const { filePath, fileName, fileContent } = data
+    if (
+      articles.find((item: ArticleProps) => item.filePath === filePath && item.title === fileName)
+    ) {
+      message.error('文件已存在')
+      return
+    }
     const newArticle = {
       id: uuidv4(),
       title: fileName,
@@ -109,6 +116,10 @@ function LeftMenu(): JSX.Element {
     message.success('导入文件成功')
   }
 
+  const handleImport = (): void => {
+    window.electron.ipcRenderer.send('open-file-dialog')
+  }
+
   useEffect(() => {
     window.electron.ipcRenderer.on('create-article', handleAdd)
     window.electron.ipcRenderer.on('open-article', handleOpen)
@@ -118,8 +129,36 @@ function LeftMenu(): JSX.Element {
 
   return (
     <Flex vertical className="h-full">
-      <div className="w-full p-4 flex-shrink-0 shadow-sm">
-        <Input.Search allowClear placeholder="请输入文件名" enterButton onSearch={handleSearch} />
+      <div className="flex flex-col w-full p-4 shadow-sm">
+        <Input.Search
+          allowClear
+          placeholder="请输入文件名"
+          enterButton
+          onSearch={handleSearch}
+          style={{ color: ThemeColor.primary }}
+        />
+        <div className="flex justify-around gap-4 mt-4">
+          <Button
+            onClick={handleAdd}
+            icon={<PlusOutlined />}
+            className="flex-1"
+            ghost
+            type="primary"
+            size="small"
+          >
+            新建
+          </Button>
+          <Button
+            onClick={handleImport}
+            icon={<ImportOutlined />}
+            className="flex-1"
+            ghost
+            type="primary"
+            size="small"
+          >
+            导入
+          </Button>
+        </div>
       </div>
       <div className="flex-1 overflow-auto">
         <ul className="h-full p-4">
@@ -134,7 +173,8 @@ function LeftMenu(): JSX.Element {
                 <span className="truncate">{item.title}</span>
                 <Flex
                   gap={8}
-                  className="absolute px-2 right-2 text-[#1dabfc] group-hover:opacity-100 opacity-0 duration-500"
+                  className="absolute px-2 right-2 group-hover:opacity-100 opacity-0 duration-500"
+                  style={{ color: ThemeColor.primary }}
                 >
                   <FormOutlined onClick={(e) => handleEdit(item, e)} />
                   <Popconfirm
