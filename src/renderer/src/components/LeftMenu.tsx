@@ -95,8 +95,24 @@ function LeftMenu(): JSX.Element {
     setFilterArticles(newArticles)
   }
 
+  const handleOpen = (_event, data): void => {
+    const { filePath, fileName, fileContent } = data
+    const newArticle = {
+      id: uuidv4(),
+      title: fileName,
+      content: fileContent,
+      createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      filePath,
+      isEdit: false
+    }
+    addArticle(newArticle)
+    message.success('导入文件成功')
+  }
+
   useEffect(() => {
     window.electron.ipcRenderer.on('create-article', handleAdd)
+    window.electron.ipcRenderer.on('open-article', handleOpen)
   }, [])
 
   const resultArticles = searchValue ? filterArticles : articles

@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-05 18:20:44
  * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-08 15:00:58
+ * @LastEditTime: 2025-01-09 09:52:33
  * @FilePath: /y-markdown-editor/src/main/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -48,6 +48,27 @@ function createWindow(): void {
           accelerator: 'CmdOrCtrl+N',
           click: (): void => {
             mainWindow.webContents.send('create-article') // 通知渲染进程
+          }
+        },
+        {
+          label: '打开',
+          accelerator: 'CmdOrCtrl+O',
+          click: async (): Promise<void> => {
+            // 选择markdown文件
+            const path = await dialog.showOpenDialog({
+              properties: ['openFile'],
+              filters: [{ name: 'Markdown', extensions: ['md'] }]
+            })
+            const allFilePath = path.filePaths[0]
+            const filePath = allFilePath.split('/').slice(0, -1).join('/')
+            const fileContent = fs.readFileSync(allFilePath, 'utf-8')
+            const fileName = allFilePath.split('/')?.pop()?.replace('.md', '') ?? ''
+            mainWindow.webContents.send('open-article', {
+              allFilePath,
+              filePath,
+              fileName,
+              fileContent
+            }) // 通知渲染进程
           }
         }
       ]
