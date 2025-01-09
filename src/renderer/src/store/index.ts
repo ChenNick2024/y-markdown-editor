@@ -2,17 +2,17 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-06 09:17:11
  * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-08 14:42:13
+ * @LastEditTime: 2025-01-09 10:05:03
  * @FilePath: /y-markdown-editor/src/renderer/src/store/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { create } from 'zustand'
 import { message } from 'antd'
-import { ArticleProps } from '@renderer/utils/types'
+import { ArticleProps, StoreProps } from '@renderer/utils/types'
 import { getArticles } from '@renderer/utils/tool'
 import dayjs from 'dayjs'
 
-export const useStore = create((set) => ({
+export const useStore = create<StoreProps>((set) => ({
   // 文章相关
   articles: getArticles(),
   activeArticle: getArticles()[0] || {},

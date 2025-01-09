@@ -13,17 +13,17 @@ import dayjs from 'dayjs'
 
 function RightContent(): JSX.Element {
   const editorRef = useRef<Editor>(null)
-  const activeArticle = useStore((state: any) => state.activeArticle)
-  const articles = useStore((state: any) => state.articles)
-  const tabs = useStore((state: any) => state.tabs)
-  const saveCurrentArticle = useStore((state: any) => state.saveCurrentArticle)
-  const addArticle = useStore((state: any) => state.addArticle)
+  const activeArticle = useStore((state) => state.activeArticle)
+  const articles = useStore((state) => state.articles)
+  const tabs = useStore((state) => state.tabs)
+  const saveCurrentArticle = useStore((state) => state.saveCurrentArticle)
+  const addArticle = useStore((state) => state.addArticle)
 
   const handleSave = (): void => {
     const markdownContent = editorRef.current?.getInstance().getMarkdown() // 获取 Markdown 内容
     saveCurrentArticle({
       ...activeArticle,
-      content: markdownContent
+      content: markdownContent || '' // Provide empty string as fallback
     })
   }
 

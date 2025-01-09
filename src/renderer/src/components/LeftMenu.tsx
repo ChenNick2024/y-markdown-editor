@@ -10,15 +10,14 @@ import { useEffect } from 'react'
 import { ArticleProps } from '@renderer/utils/types'
 
 function LeftMenu(): JSX.Element {
-  const articles = useStore((state: any) => state.articles)
-  const activeArticle = useStore((state: any) => state.activeArticle)
+  const articles = useStore((state) => state.articles)
+  const activeArticle = useStore((state) => state.activeArticle)
 
-  const updateArticle = useStore((state: any) => state.updateArticle)
-  const deleteArticle = useStore((state: any) => state.deleteArticle)
-  const setActiveArticle = useStore((state: any) => state.setActiveArticle)
-  const addArticle = useStore((state: any) => state.addArticle)
-  const addTab = useStore((state: any) => state.addTab)
-  const updateTab = useStore((state: any) => state.updateTab)
+  const updateArticle = useStore((state) => state.updateArticle)
+  const deleteArticle = useStore((state) => state.deleteArticle)
+  const setActiveArticle = useStore((state) => state.setActiveArticle)
+  const addArticle = useStore((state) => state.addArticle)
+  const addTab = useStore((state) => state.addTab)
 
   const [searchValue, setSearchValue] = useState<string>('')
   const [filterArticles, setFilterArticles] = useState<ArticleProps[]>([])
