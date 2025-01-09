@@ -10,6 +10,7 @@ import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
 import ModalAdd from './Modal/ModalAdd'
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
+import emptyIcon from '@renderer/assets/empty-icon.png'
 
 function RightContent(): JSX.Element {
   const editorRef = useRef<Editor>(null)
@@ -83,9 +84,9 @@ function RightContent(): JSX.Element {
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
               <Empty
-                image={<FrownOutlined className="text-[40px] text-gray-500" />}
-                imageStyle={{ height: 40 }}
-                description={<Typography.Text>请先选择一篇文章</Typography.Text>}
+                image={<img className="w-full" src={emptyIcon} alt="empty" />}
+                imageStyle={{ width: '350px', height: '350px' }}
+                description={''}
               >
                 {!articles.length ? (
                   <Button type="primary" onClick={handleAdd}>

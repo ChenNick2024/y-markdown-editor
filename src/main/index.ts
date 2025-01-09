@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-05 18:20:44
  * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-09 10:37:00
+ * @LastEditTime: 2025-01-09 12:08:22
  * @FilePath: /y-markdown-editor/src/main/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -177,6 +177,47 @@ app.whenReady().then(() => {
       console.error(error)
       return { code: 1, message: '文件删除失败' }
     }
+  })
+
+  // ipcMain.on('open-file', (_event, filePath) => {
+  //   if (filePath && fs.existsSync(filePath)) {
+  //     shell.showItemInFolder(filePath)
+  //   } else {
+  //     console.error('文件不存在')
+  //   }
+  // })
+
+  ipcMain.on('show-context-menu', (_event, filePath, id) => {
+    const template = [
+      {
+        label: '打开文件夹',
+        click: (): void => {
+          if (filePath && fs.existsSync(filePath)) {
+            shell.showItemInFolder(filePath)
+          } else {
+            console.error('文件不存在')
+          }
+          shell.showItemInFolder(filePath)
+        }
+      },
+      {
+        label: '删除源文件',
+        click: (): void => {
+          // 删除源文件，本地文件也一起删除
+          fs.unlinkSync(filePath)
+          mainWindow.webContents.send('delete-local-file', id)
+        }
+      },
+      {
+        label: '删除本地文件',
+        click: (): void => {
+          // 删除本地文件，保留源文件
+          mainWindow.webContents.send('delete-local-file', id)
+        }
+      }
+    ]
+    const menu = Menu.buildFromTemplate(template)
+    menu.popup()
   })
 
   createWindow()

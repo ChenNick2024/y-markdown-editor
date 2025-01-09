@@ -95,35 +95,59 @@ function LeftMenu(): JSX.Element {
     setFilterArticles(newArticles)
   }
 
-  const handleOpen = (_event, data): void => {
-    const { filePath, fileName, fileContent } = data
-    if (
-      articles.find((item: ArticleProps) => item.filePath === filePath && item.title === fileName)
-    ) {
-      message.error('文件已存在')
-      return
-    }
-    const newArticle = {
-      id: uuidv4(),
-      title: fileName,
-      content: fileContent,
-      createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      filePath,
-      isEdit: false
-    }
-    addArticle(newArticle)
-    message.success('导入文件成功')
-  }
-
   const handleImport = (): void => {
     window.electron.ipcRenderer.send('open-file-dialog')
+  }
+  const handleContextMenu = (e: MouseEvent): void => {
+    const target = e.target as HTMLElement
+    const filePath = target.getAttribute('data-file-all-path')
+    const id = target.getAttribute('data-id')
+    if (!filePath || !id) return
+    window.electron.ipcRenderer.send('show-context-menu', filePath, id) // 通知主进程
+  }
+
+  const handleDeleteLocalFile = (_event, id: string): void => {
+    deleteArticle(id)
   }
 
   useEffect(() => {
     window.electron.ipcRenderer.on('create-article', handleAdd)
-    window.electron.ipcRenderer.on('open-article', handleOpen)
+    window.electron.ipcRenderer.on('delete-local-file', handleDeleteLocalFile)
+    window.addEventListener('contextmenu', handleContextMenu)
+    return (): void => {
+      window.removeEventListener('contextmenu', handleContextMenu)
+      window.electron.ipcRenderer.removeAllListeners('create-article')
+      window.electron.ipcRenderer.removeAllListeners('delete-local-file')
+    }
   }, [])
+
+  useEffect(() => {
+    const handleOpen = (_event, data): void => {
+      const { filePath, fileName, fileContent } = data
+      console.log('articles', articles)
+      if (
+        articles.find((item: ArticleProps) => item.filePath === filePath && item.title === fileName)
+      ) {
+        message.error('文件已存在')
+        return
+      }
+      const newArticle = {
+        id: uuidv4(),
+        title: fileName,
+        content: fileContent,
+        createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        filePath,
+        isEdit: false
+      }
+      addArticle(newArticle)
+      message.success('导入文件成功')
+    }
+    window.electron.ipcRenderer.on('open-article', handleOpen)
+    return (): void => {
+      window.electron.ipcRenderer.removeAllListeners('open-article')
+    }
+  }, [articles])
 
   const resultArticles = searchValue ? filterArticles : articles
 
@@ -165,6 +189,8 @@ function LeftMenu(): JSX.Element {
           {resultArticles.length ? (
             resultArticles.map((item, index) => (
               <li
+                data-file-all-path={`${item.filePath}/${item.title}.md`}
+                data-id={item.id}
                 className="relative group flex items-center h-[32px] text-[#333] cursor-pointer mb-2 px-2 py-5 rounded-md hover:bg-[#f0f0f0]"
                 style={{ backgroundColor: item.id == activeArticle.id ? '#f0f0f0' : 'transparent' }}
                 key={index}
