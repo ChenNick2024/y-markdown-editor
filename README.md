@@ -2,7 +2,7 @@
  * @Author: 陈尼克 xianyou1993@qq.com
  * @Date: 2025-01-05 18:20:44
  * @LastEditors: 陈尼克 xianyou1993@qq.com
- * @LastEditTime: 2025-01-11 13:45:26
+ * @LastEditTime: 2025-01-11 19:29:17
  * @FilePath: /y-markdown-editor/README.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -27,3 +27,5 @@
 - [ ] 自定义顶部
 - [x] 通过`electron-localshortcut`修复`Mac`快捷键不生效的问题
 - [x] 通过`Zustand`的`persist`持久化数据
+- [x] 抽离`main/index.ts`中的一些逻辑
+- [x] 解决`markdown`编辑器中`img`无法显示的问题
