@@ -73,17 +73,6 @@ function LeftMenu(): JSX.Element {
     })
   }
 
-  const handleDelete = (item: ArticleProps, e: MouseEvent): void => {
-    e.stopPropagation()
-    window.electron.ipcRenderer.invoke('delete-article', item.filePath, item.title).then((res) => {
-      if (res.code === 0) {
-        deleteArticle(item.id)
-      } else {
-        message.error(res.message)
-      }
-    })
-  }
-
   const handleActive = (article: ArticleProps): void => {
     setActiveArticle(article)
     addTab(article)
@@ -203,15 +192,6 @@ function LeftMenu(): JSX.Element {
                   style={{ color: ThemeColor.primary }}
                 >
                   <FormOutlined onClick={(e) => handleEdit(item, e)} />
-                  <Popconfirm
-                    title="确定要删除吗？"
-                    onConfirm={(e) => handleDelete(item, e)}
-                    onCancel={(e) => e.stopPropagation()}
-                    okText="确定"
-                    cancelText="取消"
-                  >
-                    <DeleteOutlined onClick={(e) => e.stopPropagation()} />
-                  </Popconfirm>
                 </Flex>
               </li>
             ))

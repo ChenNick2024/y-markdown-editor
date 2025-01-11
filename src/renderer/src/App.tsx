@@ -9,7 +9,7 @@ function App(): JSX.Element {
   return (
     <ConfigProviderWarp>
       <AntdApp>
-        <Layout className="h-screen overflow-hidden">
+        <Layout className="h-screen overflow-hidden bg-[#f5f5f5]">
           <Sider theme="light" width={240}>
             <LeftMenu />
           </Sider>
