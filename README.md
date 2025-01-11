@@ -1,3 +1,11 @@
+<!--
+ * @Author: 陈尼克 xianyou1993@qq.com
+ * @Date: 2025-01-05 18:20:44
+ * @LastEditors: 陈尼克 xianyou1993@qq.com
+ * @LastEditTime: 2025-01-11 13:45:26
+ * @FilePath: /y-markdown-editor/README.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # y-markdown-editor
 
 #### 一个基于 Electron 的 Markdown 编辑器。
@@ -16,4 +24,6 @@
 - [x] 导入文件
 - [x] 「右键菜单」删除本地文件、删除源文件
 - [x] 「右键菜单」定位文件位置
-- [] 自定义顶部
+- [ ] 自定义顶部
+- [x] 通过`electron-localshortcut`修复`Mac`快捷键不生效的问题
+- [x] 通过`Zustand`的`persist`持久化数据

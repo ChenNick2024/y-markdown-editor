@@ -35,6 +35,9 @@ importers:
       electron-is-dev:
         specifier: ^2.0.0
         version: 2.0.0
+      electron-localshortcut:
+        specifier: ^3.2.1
+        version: 3.2.1
       electron-updater:
         specifier: ^6.1.7
         version: 6.3.9
@@ -1299,8 +1302,14 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
+  electron-is-accelerator@0.1.2:
+    resolution: {integrity: sha512-fLGSAjXZtdn1sbtZxx52+krefmtNuVwnJCV2gNiVt735/ARUboMl8jnNC9fZEqQdlAv2ZrETfmBUsoQci5evJA==}
+
   electron-is-dev@2.0.0:
     resolution: {integrity: sha512-3X99K852Yoqu9AcW50qz3ibYBWY79/pBhlMCab8ToEWS48R0T9tyxRiQhwylE7zQdXrMnx2JKqUJyMPmt5FBqA==}
+
+  electron-localshortcut@3.2.1:
+    resolution: {integrity: sha512-DWvhKv36GsdXKnaFFhEiK8kZZA+24/yFLgtTwJJHc7AFgDjNRIBJZ/jq62Y/dWv9E4ypYwrVWN2bVrCYw1uv7Q==}
 
   electron-publish@24.13.1:
     resolution: {integrity: sha512-2ZgdEqJ8e9D17Hwp5LEq5mLQPjqU3lv/IALvgp+4W8VeNhryfGhYEQC/PgDPMrnWUp+l60Ou5SJLsu+k4mhQ8A==}
@@ -1899,6 +1908,12 @@ packages:
   jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
+
+  keyboardevent-from-electron-accelerator@2.0.0:
+    resolution: {integrity: sha512-iQcmNA0M4ETMNi0kG/q0h/43wZk7rMeKYrXP7sqKIJbHkTU8Koowgzv+ieR/vWJbOwxx5nDC3UnudZ0aLSu4VA==}
+
+  keyboardevents-areequal@0.2.2:
+    resolution: {integrity: sha512-Nv+Kr33T0mEjxR500q+I6IWisOQ0lK1GGOncV0kWE6n4KFmpcu7RUX5/2B0EUtX51Cb0HjZ9VJsSY3u4cBa0kw==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -4479,7 +4494,18 @@ snapshots:
       - electron-builder-squirrel-windows
       - supports-color
 
+  electron-is-accelerator@0.1.2: {}
+
   electron-is-dev@2.0.0: {}
+
+  electron-localshortcut@3.2.1:
+    dependencies:
+      debug: 4.4.0
+      electron-is-accelerator: 0.1.2
+      keyboardevent-from-electron-accelerator: 2.0.0
+      keyboardevents-areequal: 0.2.2
+    transitivePeerDependencies:
+      - supports-color
 
   electron-publish@24.13.1:
     dependencies:
@@ -5277,6 +5303,10 @@ snapshots:
       array.prototype.flat: 1.3.3
       object.assign: 4.1.7
       object.values: 1.2.1
+
+  keyboardevent-from-electron-accelerator@2.0.0: {}
+
+  keyboardevents-areequal@0.2.2: {}
 
   keyv@4.5.4:
     dependencies:

@@ -1,12 +1,13 @@
 /*
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-05 18:20:44
- * @LastEditors: Nick930826 xianyou1993@qq.com
- * @LastEditTime: 2025-01-09 12:08:22
+ * @LastEditors: 陈尼克 xianyou1993@qq.com
+ * @LastEditTime: 2025-01-11 13:43:22
  * @FilePath: /y-markdown-editor/src/main/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { app, shell, BrowserWindow, ipcMain, Menu, dialog } from 'electron'
+const electronLocalshortcut = require('electron-localshortcut')
 import { join } from 'path'
 import fs from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -37,6 +38,28 @@ function createWindow(): void {
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
+  })
+
+  mainWindow.webContents.setIgnoreMenuShortcuts(true)
+
+  electronLocalshortcut.register(mainWindow, 'CommandOrControl+C', () => {
+    mainWindow.webContents.copy()
+  })
+
+  electronLocalshortcut.register(mainWindow, 'CommandOrControl+V', () => {
+    mainWindow.webContents.paste()
+  })
+
+  electronLocalshortcut.register(mainWindow, 'CommandOrControl+X', () => {
+    mainWindow.webContents.cut()
+  })
+
+  electronLocalshortcut.register(mainWindow, 'CommandOrControl+Z', () => {
+    mainWindow.webContents.undo()
+  })
+
+  electronLocalshortcut.register(mainWindow, 'CommandOrControl+A', () => {
+    mainWindow.webContents.selectAll()
   })
 
   const menu = Menu.buildFromTemplate([
@@ -72,6 +95,17 @@ function createWindow(): void {
             }) // 通知渲染进程
           }
         }
+      ]
+    },
+    {
+      label: '快捷键',
+      submenu: [
+        { label: '复制', accelerator: 'CmdOrCtrl+C', role: 'copy' },
+        { label: '粘贴', accelerator: 'CmdOrCtrl+V', role: 'paste' },
+        { label: '剪切', accelerator: 'CmdOrCtrl+X', role: 'cut' },
+        { label: '撤销', accelerator: 'CmdOrCtrl+Z', role: 'undo' },
+        { label: '重做', accelerator: 'Shift+CmdOrCtrl+Z', role: 'redo' },
+        { label: '全选', accelerator: 'CmdOrCtrl+A', role: 'selectAll' }
       ]
     }
   ])
