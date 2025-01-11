@@ -143,7 +143,13 @@ function LeftMenu(): JSX.Element {
   return (
     <Flex vertical className="h-full">
       <div className="flex flex-col w-full p-4 shadow-sm">
-        <Input.Search allowClear placeholder="请输入文件名" onSearch={handleSearch} size="small" style={{ fontSize: '12px' }} />
+        <Input.Search
+          allowClear
+          placeholder="请输入文件名"
+          onSearch={handleSearch}
+          size="small"
+          style={{ fontSize: '12px' }}
+        />
         <div className="flex justify-around gap-4 mt-4">
           <Button
             onClick={handleAdd}
