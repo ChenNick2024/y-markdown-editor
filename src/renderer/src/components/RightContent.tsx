@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Empty, Button, Typography, message } from 'antd'
-import { FrownOutlined } from '@ant-design/icons'
+import { Empty, Button, message } from 'antd'
 import { Editor } from '@toast-ui/react-editor'
 import TopTabs from './TopTabs'
 import { useStore } from '@renderer/store'
