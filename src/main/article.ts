@@ -1,24 +1,6 @@
 import { BrowserWindow, ipcMain, dialog } from 'electron'
 import fs from 'fs'
 export default (mainWindow: BrowserWindow): void => {
-  // 导入一个markdown文件
-  ipcMain.on('open-file-dialog', async () => {
-    const path = await dialog.showOpenDialog({
-      properties: ['openFile'],
-      filters: [{ name: 'Markdown', extensions: ['md'] }]
-    })
-    if (path.canceled) return
-    const allFilePath = path.filePaths[0]
-    const filePath = allFilePath.split('/').slice(0, -1).join('/')
-    const fileContent = fs.readFileSync(allFilePath, 'utf-8')
-    const fileName = allFilePath.split('/')?.pop()?.replace('.md', '') ?? ''
-    mainWindow.webContents.send('open-article', {
-      allFilePath,
-      filePath,
-      fileName,
-      fileContent
-    }) // 通知渲染进程
-  })
   // 选择一个存储路径
   ipcMain.handle('select-path', () => {
     const path = dialog.showOpenDialogSync({

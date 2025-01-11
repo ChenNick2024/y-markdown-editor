@@ -11,10 +11,10 @@ let mainWindow: BrowserWindow
 function createWindow(): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    minWidth: 1200,
-    minHeight: 800,
-    width: 1200,
-    height: 800,
+    minWidth: 1000,
+    minHeight: 600,
+    width: 1000,
+    height: 600,
     show: false,
     frame: false,
     autoHideMenuBar: true,
@@ -68,7 +68,6 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
   if (isDev) mainWindow.webContents.openDevTools()
-  articleOpt(mainWindow)
 }
 
 // This method will be called when Electron has finished
@@ -76,7 +75,36 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('wang.chennick')
+
+  articleOpt(mainWindow)
+  // 导入一个markdown文件
+  ipcMain.on('open-file-dialog', async () => {
+    const path = await dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: [{ name: 'Markdown', extensions: ['md'] }]
+    })
+    if (path.canceled) return
+    const allFilePath = path.filePaths[0]
+    const filePath = allFilePath.split('/').slice(0, -1).join('/')
+    const fileContent = fs.readFileSync(allFilePath, 'utf-8')
+    const fileName = allFilePath.split('/')?.pop()?.replace('.md', '') ?? ''
+    mainWindow.webContents.send('open-article', {
+      allFilePath,
+      filePath,
+      fileName,
+      fileContent
+    }) // 通知渲染进程
+  })
+  ipcMain.on('maximize', () => {
+    mainWindow.maximize()
+  })
+  ipcMain.on('minimize', () => {
+    mainWindow.minimize()
+  })
+  ipcMain.on('close', () => {
+    mainWindow.close()
+  })
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
