@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-08 09:52:43
  * @LastEditors: 陈尼克 xianyou1993@qq.com
- * @LastEditTime: 2025-01-19 11:02:30
+ * @LastEditTime: 2025-01-19 11:09:01
  * @FilePath: /y-markdown-editor/src/renderer/src/components/Tabs.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -33,6 +33,20 @@ export default function TopTabs(): JSX.Element {
             hideAdd
             activeKey={activeArticle.id}
             onEdit={(id, action) => {
+              const dle = (): void => {
+                if (action === 'remove') {
+                  // 不保存的情况下，将编辑状态设置为false，不写入本地，下次读取的时候，本地就不会有新内容
+                  setActiveArticle({
+                    ...activeArticle,
+                    isEdit: false
+                  })
+                  deleteTab(id as string)
+                  // 如果删除的是当前激活的标签，则激活第一个标签
+                  if (activeArticle.id === id && tabs.length > 1) {
+                    setActiveArticle(tabs[0])
+                  }
+                }
+              }
               if (activeArticle.isEdit) {
                 Modal.confirm({
                   title: '提示',
@@ -46,28 +60,13 @@ export default function TopTabs(): JSX.Element {
                         ...activeArticle,
                         isEdit: false
                       })
-                      deleteTab(id as string)
-                      // 如果删除的是当前激活的标签，则激活第一个标签
-                      if (activeArticle.id === id && tabs.length > 1) {
-                        setActiveArticle(tabs[0])
-                      }
+                      dle()
                     }
                   },
-                  onCancel: () => {
-                    if (action === 'remove') {
-                      // 不保存的情况下，将编辑状态设置为false，不写入本地，下次读取的时候，本地就不会有新内容
-                      setActiveArticle({
-                        ...activeArticle,
-                        isEdit: false
-                      })
-                      deleteTab(id as string)
-                      // 如果删除的是当前激活的标签，则激活第一个标签
-                      if (activeArticle.id === id && tabs.length > 1) {
-                        setActiveArticle(tabs[0])
-                      }
-                    }
-                  }
+                  onCancel: dle
                 })
+              } else {
+                dle()
               }
             }}
             items={tabs.map((item) => ({
