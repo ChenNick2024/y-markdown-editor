@@ -2,7 +2,7 @@
  * @Author: Nick930826 xianyou1993@qq.com
  * @Date: 2025-01-06 09:17:11
  * @LastEditors: 陈尼克 xianyou1993@qq.com
- * @LastEditTime: 2025-01-11 12:28:22
+ * @LastEditTime: 2025-01-19 10:50:53
  * @FilePath: /y-markdown-editor/src/renderer/src/store/index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -18,14 +18,23 @@ export const useStore = create<StoreProps>()(
       articles: [],
       activeArticle: {} as ArticleProps,
       setActiveArticle: async (article: ArticleProps): Promise<void> => {
-        const res = await window.electron.ipcRenderer.invoke('get-current-article', article)
-        article.content = res.content
-        set((state) => {
-          return {
-            activeArticle: article,
-            articles: state.articles.map((item) => (item.id === article.id ? article : item))
-          }
-        })
+        // 如果是处于编辑状态，直接获取缓存内的信息
+        if (article.isEdit) {
+          set(() => {
+            return {
+              activeArticle: article
+            }
+          })
+        } else {
+          const res = await window.electron.ipcRenderer.invoke('get-current-article', article)
+          article.content = res.content
+          set((state) => {
+            return {
+              activeArticle: article,
+              articles: state.articles.map((item) => (item.id === article.id ? article : item))
+            }
+          })
+        }
       },
       addArticle: (article: ArticleProps): void => {
         set((state) => {
@@ -47,7 +56,8 @@ export const useStore = create<StoreProps>()(
             title: article.title
           })
           return {
-            articles: _articles
+            articles: _articles,
+            activeArticle: article
           }
         })
       },
@@ -58,11 +68,12 @@ export const useStore = create<StoreProps>()(
           /// 保存当前文章需要将文章内容同步到对应的路径文件里写入
           window.electron.ipcRenderer.invoke('save-article', article).then((res) => {
             if (res.code === 0) {
-              message.success('保存成功')
+              // message.success('保存成功')
             } else {
               message.error(res.message)
             }
           })
+          console.log('_articles', _articles)
           return {
             activeArticle: article,
             articles: _articles

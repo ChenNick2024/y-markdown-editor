@@ -18,12 +18,33 @@ function RightContent(): JSX.Element {
   const tabs = useStore((state) => state.tabs)
   const saveCurrentArticle = useStore((state) => state.saveCurrentArticle)
   const addArticle = useStore((state) => state.addArticle)
+  const updateTab = useStore((state) => state.updateTab)
+  const updateArticle = useStore((state) => state.updateArticle)
 
   const handleSave = (): void => {
     const markdownContent = editorRef.current?.getInstance().getMarkdown() // 获取 Markdown 内容
     saveCurrentArticle({
       ...activeArticle,
-      content: markdownContent || '' // Provide empty string as fallback
+      content: markdownContent || '', // Provide empty string as fallback
+      isEdit: false
+    })
+    updateTab({
+      ...activeArticle,
+      isEdit: false
+    })
+    message.success('保存成功')
+  }
+
+  const handleChange = (): void => {
+    const markdownContent = editorRef.current?.getInstance().getMarkdown() // 获取 Markdown 内容
+    updateTab({
+      ...activeArticle,
+      isEdit: true
+    })
+    updateArticle({
+      ...activeArticle,
+      content: markdownContent || '',
+      isEdit: true
     })
   }
 
@@ -79,6 +100,7 @@ function RightContent(): JSX.Element {
               initialEditType="markdown" // 初始编辑模式：markdown 或 wysiwyg
               useCommandShortcut={false} // 是否启用快捷键
               plugins={[codeSyntaxHighlight]} // 使用代码高亮插件
+              onChange={handleChange}
             />
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
