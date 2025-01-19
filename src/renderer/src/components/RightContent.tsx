@@ -25,7 +25,7 @@ function RightContent(): JSX.Element {
     const markdownContent = editorRef.current?.getInstance().getMarkdown() // 获取 Markdown 内容
     saveCurrentArticle({
       ...activeArticle,
-      content: markdownContent || '', // Provide empty string as fallback
+      content: markdownContent || '',
       isEdit: false
     })
     updateTab({
