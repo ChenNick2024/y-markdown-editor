@@ -18,6 +18,7 @@ function createWindow(): void {
     show: false,
     frame: false,
     autoHideMenuBar: true,
+    icon: join(__dirname, '../../resources/icon.ico'),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -81,20 +82,22 @@ app.whenReady().then(() => {
   // 导入一个markdown文件
   ipcMain.on('open-file-dialog', async () => {
     const path = await dialog.showOpenDialog({
-      properties: ['openFile'],
+      properties: ['openFile', 'multiSelections'],
       filters: [{ name: 'Markdown', extensions: ['md'] }]
+      // 支持多选
     })
     if (path.canceled) return
-    const allFilePath = path.filePaths[0]
-    const filePath = allFilePath.split('/').slice(0, -1).join('/')
-    const fileContent = fs.readFileSync(allFilePath, 'utf-8')
-    const fileName = allFilePath.split('/')?.pop()?.replace('.md', '') ?? ''
-    mainWindow.webContents.send('open-article', {
-      allFilePath,
-      filePath,
-      fileName,
-      fileContent
-    }) // 通知渲染进程
+    path.filePaths.forEach((allFilePath) => {
+      const filePath = allFilePath.split('/').slice(0, -1).join('/')
+      const fileContent = fs.readFileSync(allFilePath, 'utf-8')
+      const fileName = allFilePath.split('/')?.pop()?.replace('.md', '') ?? ''
+      mainWindow.webContents.send('open-article', {
+        allFilePath,
+        filePath,
+        fileName,
+        fileContent
+      }) // 通知渲染进程
+    })
   })
   ipcMain.on('maximize', () => {
     mainWindow.maximize()

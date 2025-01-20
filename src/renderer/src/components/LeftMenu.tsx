@@ -3,6 +3,8 @@ import { Input, Flex, Popconfirm, message, Empty, Button } from 'antd'
 import { FormOutlined, DeleteOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
+import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import { arrayMoveImmutable } from 'array-move'
 import ModalEditor from './Modal/ModalEditor'
 import ModalAdd from './Modal/ModalAdd'
 import { useStore } from '@renderer/store'
@@ -13,7 +15,7 @@ import { ThemeColor } from '@renderer/utils/constant'
 function LeftMenu(): JSX.Element {
   const articles = useStore((state) => state.articles)
   const activeArticle = useStore((state) => state.activeArticle)
-
+  const updateAllArticles = useStore((state) => state.updateAllArticles)
   const updateArticle = useStore((state) => state.updateArticle)
   const deleteArticle = useStore((state) => state.deleteArticle)
   const setActiveArticle = useStore((state) => state.setActiveArticle)
@@ -74,6 +76,7 @@ function LeftMenu(): JSX.Element {
   }
 
   const handleActive = (article: ArticleProps): void => {
+    console.log('article', article)
     setActiveArticle(article)
     addTab(article)
   }
@@ -97,6 +100,10 @@ function LeftMenu(): JSX.Element {
 
   const handleDeleteLocalFile = (_event, id: string): void => {
     deleteArticle(id)
+  }
+  const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }): void => {
+    const newArticles = arrayMoveImmutable([...articles], oldIndex, newIndex)
+    updateAllArticles(newArticles)
   }
 
   useEffect(() => {
@@ -130,7 +137,6 @@ function LeftMenu(): JSX.Element {
         isEdit: false
       }
       addArticle(newArticle)
-      message.success('导入文件成功')
     }
     window.electron.ipcRenderer.on('open-article', handleOpen)
     return (): void => {
@@ -139,6 +145,35 @@ function LeftMenu(): JSX.Element {
   }, [articles])
 
   const resultArticles = searchValue ? filterArticles : articles
+  const SortableItem = SortableElement(({ value, index }) => {
+    const item = value as ArticleProps
+    return (
+      <li
+        data-file-all-path={`${item.filePath}/${item.title}.md`}
+        data-id={item.id}
+        className="relative group flex items-center h-[32px] text-[#333] cursor-pointer mb-2 px-2 py-5 rounded-md hover:bg-[#f0f0f0] select-none"
+        style={{ backgroundColor: item.id == activeArticle.id ? '#f0f0f0' : 'transparent' }}
+        key={index}
+        onClick={() => handleActive(item)}
+      >
+        <span className="truncate">{item.title}</span>
+        <Flex
+          gap={8}
+          className="absolute px-2 right-2 group-hover:opacity-100 opacity-0 duration-500"
+          style={{ color: ThemeColor.primary }}
+        >
+          <FormOutlined onClick={(e) => handleEdit(item, e)} />
+        </Flex>
+      </li>
+    )
+  })
+  const SortableList = SortableContainer(({ items }) => (
+    <ul className="h-full p-4">
+      {items.map((value, index) => (
+        <SortableItem key={value.id} index={index} value={value} />
+      ))}
+    </ul>
+  ))
 
   return (
     <Flex vertical className="h-full">
@@ -174,7 +209,8 @@ function LeftMenu(): JSX.Element {
         </div>
       </div>
       <div className="flex-1 overflow-auto">
-        <ul className="h-full p-4">
+        <SortableList items={resultArticles} onSortEnd={onSortEnd} distance={10} />
+        {/* <ul className="h-full p-4">
           {resultArticles.length ? (
             resultArticles.map((item, index) => (
               <li
@@ -200,7 +236,7 @@ function LeftMenu(): JSX.Element {
               <Empty description="暂无数据" />
             </div>
           )}
-        </ul>
+        </ul> */}
       </div>
     </Flex>
   )
