@@ -2,7 +2,7 @@
  * @Author: 陈尼克 xianyou1993@qq.com
  * @Date: 2025-01-05 18:20:44
  * @LastEditors: 陈尼克 xianyou1993@qq.com
- * @LastEditTime: 2025-01-19 11:06:15
+ * @LastEditTime: 2025-01-20 11:10:20
  * @FilePath: /y-markdown-editor/README.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -31,3 +31,4 @@
 - [x] 解决`markdown`编辑器中`img`无法显示的问题
 - [x] `tab` 页签未保存红标`badge`
 - [x] `tab` 页签删除时，未保存的情况下给提示
+- [x] 添加菜单栏目的拖拽排序
