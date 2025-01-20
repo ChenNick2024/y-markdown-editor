@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Input, Flex, Popconfirm, message, Empty, Button } from 'antd'
-import { FormOutlined, DeleteOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
+import { Input, Flex, message, Empty, Button } from 'antd'
+import { FormOutlined, PlusOutlined, ImportOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
