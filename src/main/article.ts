@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain, dialog } from 'electron'
+import axios from 'axios'
 import fs from 'fs'
 export default (mainWindow: BrowserWindow): void => {
   // 选择一个存储路径

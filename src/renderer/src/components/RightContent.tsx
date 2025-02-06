@@ -7,6 +7,7 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 import 'highlight.js/styles/github.css'
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
 import ModalAdd from './Modal/ModalAdd'
+import ModalInsertImage from './Modal/ModalInsertImage'
 import { v4 as uuidv4 } from 'uuid'
 import dayjs from 'dayjs'
 import emptyIcon from '@renderer/assets/empty-icon.png'
@@ -101,6 +102,34 @@ function RightContent(): JSX.Element {
               useCommandShortcut={false} // 是否启用快捷键
               plugins={[codeSyntaxHighlight]} // 使用代码高亮插件
               onChange={handleChange}
+              toolbarItems={[
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task'],
+                ['table', 'image', 'link'],
+                [
+                  {
+                    text: '插图',
+                    name: 'customimage',
+                    tooltip: '插入图片',
+                    className: 'customimage'
+                  }
+                ]
+              ]}
+              onLoad={() => {
+                document.addEventListener('click', (e) => {
+                  if (
+                    e.target instanceof HTMLElement &&
+                    e.target.className.includes('customimage')
+                  ) {
+                    ModalInsertImage({
+                      onCb: (str) => {
+                        if (str) editorRef.current?.getInstance().insertText(str)
+                      }
+                    })
+                  }
+                })
+              }}
             />
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
